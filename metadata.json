@@ -1,0 +1,5 @@
+{
+  "name": "Reidar J. Boldevin Smart CV",
+  "description": "Interactive portfolio with Leaflet map, Chart.js timeline, and Gemini-powered chatbot with PDF analysis.",
+  "requestFramePermissions": []
+}
