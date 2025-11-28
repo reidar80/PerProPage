@@ -1,6 +1,7 @@
 import React from 'react';
 import { RESUME_DATA, UI_TRANSLATIONS } from '../constants';
 import { Language } from '../types';
+import GradeChart from './GradeChart';
 
 interface InfoSectionProps {
   language: Language;
@@ -84,6 +85,9 @@ const InfoSection: React.FC<InfoSectionProps> = ({ language }) => {
             </div>
           ))}
         </div>
+        
+        {/* Grade Visualization */}
+        <GradeChart />
       </div>
 
       {/* Projects */}

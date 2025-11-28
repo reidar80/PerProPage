@@ -41,47 +41,65 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
       </div>
 
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-              {contact.name}
-            </h1>
-            <p className="text-xl text-blue-400 font-medium">
-              {contact.title[language]}
-            </p>
-            <div className="flex flex-wrap gap-4 text-slate-300 text-sm mt-4">
-              <span className="flex items-center gap-2">
-                <i className="fas fa-map-marker-alt text-blue-500"></i> {contact.location}
-              </span>
-              <span className="flex items-center gap-2">
-                <i className="fas fa-envelope text-blue-500"></i> {contact.email}
-              </span>
-              <span className="flex items-center gap-2">
-                <i className="fas fa-phone text-blue-500"></i> {contact.mobile}
-              </span>
-            </div>
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
+          
+          {/* Profile & Contact Info */}
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8 flex-1 min-w-0">
             
-            <a 
-              href={contact.linkedin} 
-              target="_blank" 
-              rel="noreferrer"
-              className="inline-flex items-center gap-3 mt-4 px-4 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg transition-colors text-white font-medium"
-            >
-              {!imgError ? (
+            {/* Profile Image */}
+            <div className="shrink-0 relative">
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-slate-700 shadow-xl bg-slate-800">
                 <img 
-                  src="linkedin_logo.png" 
-                  alt="LinkedIn" 
-                  className="w-5 h-5 object-contain bg-white rounded-sm" 
-                  onError={() => setImgError(true)}
+                  src="img/reidar.jpg" 
+                  alt={contact.name} 
+                  className="w-full h-full object-cover object-top" 
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'; 
+                    setImgError(true); // Tracking error if needed for fallback UI logic
+                  }}
                 />
-              ) : (
-                <i className="fab fa-linkedin text-xl"></i>
-              )}
-              <span>{t.linkedin_profile[language]}</span>
-            </a>
+              </div>
+            </div>
+
+            {/* Contact Text */}
+            <div className="space-y-2 text-center md:text-left min-w-0 flex-1">
+              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight break-words">
+                {contact.name}
+              </h1>
+              <p className="text-xl text-blue-400 font-medium">
+                {contact.title[language]}
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-slate-300 text-sm mt-4">
+                <span className="flex items-center gap-2">
+                  <i className="fas fa-map-marker-alt text-blue-500"></i> {contact.location}
+                </span>
+                <a 
+                  href={`mailto:${contact.email}`} 
+                  className="flex items-center gap-2 hover:text-blue-400 transition-colors"
+                >
+                  <i className="fas fa-envelope text-blue-500"></i> {contact.email}
+                </a>
+                <span className="flex items-center gap-2">
+                  <i className="fas fa-phone text-blue-500"></i> {contact.mobile}
+                </span>
+              </div>
+              
+              <div className="flex justify-center md:justify-start pt-2">
+                <a 
+                  href={contact.linkedin} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-3 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors text-white font-medium shadow-md"
+                >
+                  <i className="fab fa-linkedin text-xl"></i>
+                  <span>{t.linkedin_profile[language]}</span>
+                </a>
+              </div>
+            </div>
           </div>
 
-          <div className="md:max-w-lg bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-sm">
+          {/* Bio Box */}
+          <div className="w-full lg:max-w-lg bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-sm mt-4 lg:mt-0">
             <h2 className="text-sm uppercase tracking-wider text-slate-400 font-bold mb-2">{t.about_me[language]}</h2>
             <p className="text-slate-300 leading-relaxed">
               {contact.bio[language]}

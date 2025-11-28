@@ -3,8 +3,8 @@ import Header from './components/Header';
 import MapComponent from './components/MapComponent';
 import TimelineChart from './components/TimelineChart';
 import ExperienceList from './components/ExperienceList';
-import ChatWidget from './components/ChatWidget';
 import InfoSection from './components/InfoSection';
+import ChatWidget from './components/ChatWidget';
 import { UI_TRANSLATIONS } from './constants';
 import { Language } from './types';
 

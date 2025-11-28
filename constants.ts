@@ -28,12 +28,12 @@ export const RESUME_DATA: ResumeData = {
     name: "Reidar J. Boldevin",
     title: {
       en: "Principal Engineer | Cybersec & Identity Pragmatist",
-      no: "Sjefingeniør | Cybersikkerhet og Identitetspragmatiker",
+      no: "Sjefsingeniør | Cybersikkerhet og Identitetspragmatiker",
       zh: "首席工程师 | 网络安全与身份管理专家"
     },
-    location: "Oslo, Norway",
+    location: "Asker, Norway",
     address: "Hofstadgata 7, 1384 Asker",
-    email: "r_boldevin@hotmail.com",
+    email: "reidar.boldevin@outlook.com",
     mobile: "+47 948 73 386",
     linkedin: "https://www.linkedin.com/in/rboldevin",
     bio: {
@@ -74,7 +74,7 @@ export const RESUME_DATA: ResumeData = {
       }
     },
     { 
-      name: "Microsoft Certified: Identity and Access Administrator Associate",
+      name: "SC-300: Microsoft Certified: Identity and Access Administrator Associate",
       description: {
         en: "Validates core skills in managing Entra ID (Azure AD), authentication, access control, and identity governance to secure organizational access.",
         no: "Validerer kjerneferdigheter i administrasjon av Entra ID (Azure AD), autentisering, tilgangskontroll og identitetsstyring for å sikre organisatorisk tilgang.",
@@ -547,6 +547,78 @@ export const RESUME_DATA: ResumeData = {
       "lng": 10.7423
     },
     {
+      "name": "Innovation Norway - MFA Rollout",
+      "year": "2019 - 2020",
+      "description": {
+        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
+        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
+        "zh": "在整个挪威创新署实施强制性MFA。"
+      },
+      "location": "Bergen, Norway",
+      "lat": 60.3913,
+      "lng": 5.3221
+    },
+    {
+      "name": "Innovation Norway - MFA Rollout",
+      "year": "2019 - 2020",
+      "description": {
+        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
+        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
+        "zh": "在整个挪威创新署实施强制性MFA。"
+      },
+      "location": "Toronto, Canada",
+      "lat": 43.6532,
+      "lng": -79.3832
+    },
+    {
+      "name": "Innovation Norway - MFA Rollout",
+      "year": "2019 - 2020",
+      "description": {
+        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
+        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
+        "zh": "在整个挪威创新署实施强制性MFA。"
+      },
+      "location": "New York, USA",
+      "lat": 40.7128,
+      "lng": -74.0060
+    },
+    {
+      "name": "Innovation Norway - MFA Rollout",
+      "year": "2019 - 2020",
+      "description": {
+        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
+        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
+        "zh": "在整个挪威创新署实施强制性MFA。"
+      },
+      "location": "Sogndal, Norway",
+      "lat": 61.2260,
+      "lng": 7.0940
+    },
+    {
+      "name": "FLIR Systems - US Cloud Advisory",
+      "year": "2018",
+      "description": {
+        "en": "Cloud adoption project advisory for US operations",
+        "no": "Rådgivning for skyinnføringsprosjekt for amerikansk avdeling",
+        "zh": "为美国业务提供云采用项目咨询"
+      },
+      "location": "Wilsonville, OR",
+      "lat": 45.3004,
+      "lng": -122.7726
+    },
+    {
+      "name": "FLIR Systems - CIS CSC Assessment",
+      "year": "2018",
+      "description": {
+        "en": "CIS CSC 18 assessment support, as identity and security architect",
+        "no": "Støtte til CIS CSC 18-vurdering, som identitets- og sikkerhetsarkitekt",
+        "zh": "作为身份和安全架构师，支持 CIS CSC 18 评估"
+      },
+      "location": "Boston, MA",
+      "lat": 42.3601,
+      "lng": -71.0589
+    },
+    {
       "name": "FLIR Systems - Pen Test Support",
       "year": "2017",
       "description": {
@@ -569,6 +641,18 @@ export const RESUME_DATA: ResumeData = {
       "location": "Oslo, Norway",
       "lat": 59.9075,
       "lng": 10.7593
+    },
+    {
+      "name": "Microsoft - Azure Training",
+      "year": "2015 - 2016",
+      "description": {
+        "en": "Instructor on custom cloud and identity training for Portugese public entities and a private company",
+        "no": "Instruktør for tilpasset sky- og identitetsopplæring for portugisiske offentlige virksomheter og et privat selskap",
+        "zh": "为葡萄牙公共实体和一家私营公司提供定制的云和身份培训讲师"
+      },
+      "location": "Lisbon, Portugal",
+      "lat": 38.7223,
+      "lng": -9.1393
     },
     {
       "name": "Norwegian Airshuttle - Hybrid Identity",
