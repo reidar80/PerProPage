@@ -100,6 +100,18 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
 
       mapInstanceRef.current = map;
     }
+
+    // Listen for custom "map:focus" events
+    const handleMapFocus = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (mapInstanceRef.current && customEvent.detail) {
+        const { lat, lng, zoom } = customEvent.detail;
+        mapInstanceRef.current.flyTo([lat, lng], zoom, { duration: 2 });
+      }
+    };
+
+    window.addEventListener('map:focus', handleMapFocus);
+    return () => window.removeEventListener('map:focus', handleMapFocus);
   }, []);
 
   // Update markers when language changes or map initializes

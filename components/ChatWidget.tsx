@@ -78,11 +78,7 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 };
 
 const ChatWidget: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // Closed by default as per request to be minimizable/unintrusive initially? Or prompt said "able to minimize", usually implies open first? Let's keep it open initially to be discovered.
-  // Actually, standard pattern for "on the right hand side" often implies a bubble to click. 
-  // Let's set it to closed initially so it doesn't block content on mobile, but easily accessible.
-  // Re-reading: "It will be on the right hand side, and should be able to minimize."
-  // I will default to OPEN so the user sees it immediately as a feature, but they can minimize it.
+  const [isOpen, setIsOpen] = useState(true); // Default to open
   
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'model', text: 'Hi! I am Reidar\'s AI assistant. Ask me anything about his experience, skills, or projects.' }

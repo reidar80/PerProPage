@@ -13,6 +13,15 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
   const [imgError, setImgError] = useState(false);
   const t = UI_TRANSLATIONS;
 
+  const handleLocationClick = () => {
+    // Dispatch event to map component
+    // Coordinates for Asker, Norway
+    const event = new CustomEvent('map:focus', { 
+      detail: { lat: 59.8333, lng: 10.4400, zoom: 12 } 
+    });
+    window.dispatchEvent(event);
+  };
+
   return (
     <header className="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 shadow-md relative">
       {/* Language Switcher */}
@@ -70,9 +79,13 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
                 {contact.title[language]}
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 text-slate-300 text-sm mt-4">
-                <span className="flex items-center gap-2">
+                <button 
+                  onClick={handleLocationClick}
+                  className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer bg-transparent border-none p-0 text-inherit"
+                  title="Show on map"
+                >
                   <i className="fas fa-map-marker-alt text-blue-500"></i> {contact.location}
-                </span>
+                </button>
                 <a 
                   href={`mailto:${contact.email}`} 
                   className="flex items-center gap-2 hover:text-blue-400 transition-colors"
