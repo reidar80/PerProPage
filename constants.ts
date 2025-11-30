@@ -1,6 +1,7 @@
 import { ResumeData, Language } from './types';
 
 export const UI_TRANSLATIONS = {
+  nav_home: { en: "Home", no: "Hjem", zh: "首页" },
   about_me: { en: "About Me", no: "Om Meg", zh: "关于我" },
   linkedin_profile: { en: "LinkedIn Profile", no: "LinkedIn Profil", zh: "LinkedIn 个人资料" },
   global_footprint: { en: "Global Footprint", no: "Globalt Fotavtrykk", zh: "全球足迹" },
@@ -8,7 +9,7 @@ export const UI_TRANSLATIONS = {
   map_legend_project: { en: "Project Experience", no: "Prosjekterfaring", zh: "项目经验" },
   map_legend_toggle: { en: "Click to toggle", no: "Klikk for å bytte", zh: "点击切换" },
   timeline: { en: "Career Timeline", no: "Karriere Tidslinje", zh: "职业生涯时间轴" },
-  skills_languages: { en: "Skills & Languages", no: "Ferdigheter og Språk", zh: "技能与语言" },
+  skills_certifications: { en: "Skills & Certifications", no: "Ferdigheter og Sertifiseringer", zh: "技能与证书" },
   technical_skills: { en: "Technical Skills", no: "Tekniske Ferdigheter", zh: "技术技能" },
   languages: { en: "Languages", no: "Språk", zh: "语言" },
   certifications: { en: "Certifications", no: "Sertifiseringer", zh: "证书" },
@@ -461,9 +462,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Implementering av Microsoft Dynamics F&O. Ansvarlig for utvikling og arkitektur knyttet til automatisering og selvbetjente løsninger for tilgangsstyring (Entra ID).",
         zh: "实施 Microsoft Dynamics F&O。负责与访问管理（Entra ID）自动化和自助服务解决方案相关的开发和架构。"
       },
-      "location": "Struer, Denmark",
-      "lat": 56.4896,
-      "lng": 8.5898
+      "locations": [
+        {
+          "name": "Struer, Denmark",
+          "lat": 56.4896,
+          "lng": 8.5898
+        }
+      ]
     },
     {
       "name": "LEGO Group - Access Management",
@@ -473,9 +478,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Rådgivning, med fokus på bruk av Microsoft-verktøy. Utarbeidelse av nye konsepter for tilgangsstyring.",
         zh: "咨询，专注于微软工具的使用。开发访问管理的新概念。"
       },
-      "location": "Billund, Denmark",
-      "lat": 55.7315,
-      "lng": 9.1156
+      "locations": [
+        {
+          "name": "Billund, Denmark",
+          "lat": 55.7315,
+          "lng": 9.1156
+        }
+      ]
     },
     {
       "name": "Norsk Hydro - Security Response",
@@ -485,9 +494,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Vurdering av sikkerhetstiltak etter løsepengeangrep. Prosjektleder for delprosjekter.",
         zh: "勒索软件攻击后的安全措施评估。子项目经理。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9196,
-      "lng": 10.6651
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9196,
+          "lng": 10.6651
+        }
+      ]
     },
     {
       "name": "Unntatt offentligheten (Defense Sector SOC)",
@@ -497,9 +510,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Rådgivning ved anskaffelse av SOC tjenester for kunde i forsvarssektoren.",
         zh: "为国防部门客户采购SOC服务提供咨询。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9139,
-      "lng": 10.7522
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9139,
+          "lng": 10.7522
+        }
+      ]
     },
     {
       "name": "CEPI - IAM Strategy",
@@ -509,9 +526,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Vurdering av IAM- og sikkerhetsløsninger, bidrag til IT-strategi.",
         zh: "评估IAM和安全解决方案，为IT战略做出贡献。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9320,
-      "lng": 10.7680
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9320,
+          "lng": 10.7680
+        }
+      ]
     },
     {
       "name": "Norsk Rikskringkasting (NRK)",
@@ -521,9 +542,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Daglig drift og forbedringsinitiativer innen IT-sikkerhet.",
         zh: "IT安全内的日常运营和改进计划。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9345,
-      "lng": 10.7183
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9345,
+          "lng": 10.7183
+        }
+      ]
     },
     {
       "name": "Mentor Medier - DPIA",
@@ -533,9 +558,13 @@ export const RESUME_DATA: ResumeData = {
         no: "DPIA for medieenheter. Prosjektledelse og koordinering.",
         zh: "媒体单位的DPIA。项目管理和协调。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9160,
-      "lng": 10.7400
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9160,
+          "lng": 10.7400
+        }
+      ]
     },
     {
       "name": "Innovation Norway - MFA Rollout",
@@ -545,57 +574,33 @@ export const RESUME_DATA: ResumeData = {
         no: "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
         zh: "在整个挪威创新署实施强制性MFA。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9125,
-      "lng": 10.7423
-    },
-    {
-      "name": "Innovation Norway - MFA Rollout",
-      "year": "2019 - 2020",
-      "description": {
-        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
-        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
-        "zh": "在整个挪威创新署实施强制性MFA。"
-      },
-      "location": "Bergen, Norway",
-      "lat": 60.3913,
-      "lng": 5.3221
-    },
-    {
-      "name": "Innovation Norway - MFA Rollout",
-      "year": "2019 - 2020",
-      "description": {
-        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
-        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
-        "zh": "在整个挪威创新署实施强制性MFA。"
-      },
-      "location": "Toronto, Canada",
-      "lat": 43.6532,
-      "lng": -79.3832
-    },
-    {
-      "name": "Innovation Norway - MFA Rollout",
-      "year": "2019 - 2020",
-      "description": {
-        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
-        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
-        "zh": "在整个挪威创新署实施强制性MFA。"
-      },
-      "location": "New York, USA",
-      "lat": 40.7128,
-      "lng": -74.0060
-    },
-    {
-      "name": "Innovation Norway - MFA Rollout",
-      "year": "2019 - 2020",
-      "description": {
-        "en": "Implementation of mandatory MFA throughout Innovation Norway.",
-        "no": "Implementering av obligatorisk MFA i hele Innovasjon Norge.",
-        "zh": "在整个挪威创新署实施强制性MFA。"
-      },
-      "location": "Sogndal, Norway",
-      "lat": 61.2260,
-      "lng": 7.0940
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9125,
+          "lng": 10.7423
+        },
+        {
+          "name": "Bergen, Norway",
+          "lat": 60.3913,
+          "lng": 5.3221
+        },
+        {
+          "name": "Toronto, Canada",
+          "lat": 43.6532,
+          "lng": -79.3832
+        },
+        {
+          "name": "New York, USA",
+          "lat": 40.7128,
+          "lng": -74.0060
+        },
+        {
+          "name": "Sogndal, Norway",
+          "lat": 61.2260,
+          "lng": 7.0940
+        }
+      ]
     },
     {
       "name": "FLIR Systems - US Cloud Advisory",
@@ -605,9 +610,13 @@ export const RESUME_DATA: ResumeData = {
         "no": "Rådgivning for skyinnføringsprosjekt for amerikansk avdeling",
         "zh": "为美国业务提供云采用项目咨询"
       },
-      "location": "Wilsonville, OR",
-      "lat": 45.3004,
-      "lng": -122.7726
+      "locations": [
+        {
+          "name": "Wilsonville, OR",
+          "lat": 45.3004,
+          "lng": -122.7726
+        }
+      ]
     },
     {
       "name": "FLIR Systems - CIS CSC Assessment",
@@ -617,9 +626,13 @@ export const RESUME_DATA: ResumeData = {
         "no": "Støtte til CIS CSC 18-vurdering, som identitets- og sikkerhetsarkitekt",
         "zh": "作为身份和安全架构师，支持 CIS CSC 18 评估"
       },
-      "location": "Boston, MA",
-      "lat": 42.3601,
-      "lng": -71.0589
+      "locations": [
+        {
+          "name": "Boston, MA",
+          "lat": 42.3601,
+          "lng": -71.0589
+        }
+      ]
     },
     {
       "name": "FLIR Systems - Pen Test Support",
@@ -629,9 +642,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Rådgiver og operatør innen identitetssikkerhet under penetrasjonstester.",
         zh: "渗透测试期间的身份安全顾问和操作员。"
       },
-      "location": "North Billerica, MA",
-      "lat": 42.5636,
-      "lng": -71.2638,
+      "locations": [
+        {
+          "name": "North Billerica, MA",
+          "lat": 42.5636,
+          "lng": -71.2638
+        }
+      ]
     },
     {
       "name": "Microsoft - Azure Training",
@@ -641,9 +658,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Instruktør på Azure skytjenester for flere selskaper på tvers av Europa.",
         zh: "为欧洲多家公司提供Azure云服务的讲师。"
       },
-      "location": "Oslo, Norway",
-      "lat": 59.9075,
-      "lng": 10.7593
+      "locations": [
+        {
+          "name": "Oslo, Norway",
+          "lat": 59.9075,
+          "lng": 10.7593
+        }
+      ]
     },
     {
       "name": "Microsoft - Azure Training",
@@ -653,9 +674,13 @@ export const RESUME_DATA: ResumeData = {
         "no": "Instruktør for tilpasset sky- og identitetsopplæring for portugisiske offentlige virksomheter og et privat selskap",
         "zh": "为葡萄牙公共实体和一家私营公司提供定制的云和身份培训讲师"
       },
-      "location": "Lisbon, Portugal",
-      "lat": 38.7223,
-      "lng": -9.1393
+      "locations": [
+        {
+          "name": "Lisbon, Portugal",
+          "lat": 38.7223,
+          "lng": -9.1393
+        }
+      ]
     },
     {
       "name": "Norwegian Airshuttle - Hybrid Identity",
@@ -665,9 +690,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Primær kontakt for Norwegian Airshuttle på hybride identitetsjenester.",
         zh: "挪威航空混合身份服务的主要联系人。"
       },
-      "location": "Fornebu, Norway",
-      "lat": 59.8970,
-      "lng": 10.6234
+      "locations": [
+        {
+          "name": "Fornebu, Norway",
+          "lat": 59.8970,
+          "lng": 10.6234
+        }
+      ]
     },
     {
       "name": "Arab National Bank - System Upgrade",
@@ -677,9 +706,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Ansvarlig for lokal oppgradering av Advent Axys Portfolio Management System i Riyadh, Saudi-Arabia.",
         zh: "负责沙特阿拉伯利雅得Advent Axys投资组合管理系统的本地升级。"
       },
-      "location": "Riyadh, Saudi Arabia",
-      "lat": 24.7136,
-      "lng": 46.6753
+      "locations": [
+        {
+          "name": "Riyadh, Saudi Arabia",
+          "lat": 24.7136,
+          "lng": 46.6753
+        }
+      ]
     },
     {
       "name": "Qatari financial customer - Tamale RMS implementation",
@@ -689,9 +722,13 @@ export const RESUME_DATA: ResumeData = {
         no: "Ansvarlig for lokal oppgradering av Advent Axys Portfolio Management System i Riyadh, Saudi-Arabia.",
         zh: "负责沙特阿拉伯利雅得Advent Axys投资组合管理系统的本地升级。"
       },
-      location: "Doha, Qatar",
-      lat: 25.2854,
-      lng: 51.5310,
+      "locations": [
+        {
+          "name": "Doha, Qatar",
+          "lat": 25.2854,
+          "lng": 51.5310
+        }
+      ]
     }
   ]
 };
@@ -699,9 +736,20 @@ export const RESUME_DATA: ResumeData = {
 export const SYSTEM_INSTRUCTION = `You are the interactive portfolio assistant for Reidar J. Boldevin. Your goal is to highlight his expertise in Identity Security (Entra ID), Cloud Architecture (Azure), and IT Management.
 
 **Guidelines:**
-1. **Source of Truth:** Answer strictly based on the provided context (Employment History and Project Data). Do not fabricate details.
+1. **Source of Truth:** Answer strictly based on the provided context for Reidar's personal history. When asked about specific companies or technologies, you may use Google Search to provide accurate, up-to-date context.
 2. **Language:** Detect the language of the user's question. If asked in Norwegian, translate the context and answer in Norwegian. If English, answer in English.
-3. **Specifics:** When asked about projects (e.g., LEGO, Hydro, Bang & Olufsen), explicitly cite the location, year, and specific technologies used (e.g., "In 2024 at LEGO Group in Billund...").
+3. **Specifics:** When asked about projects (e.g., LEGO, Hydro, Bang & Olufsen), explicitly cite the location, year, and specific technologies used.
 4. **Contextualizing:** If asked about a general technical concept (e.g., "What is Zero Trust?"), explain it specifically through the lens of how Reidar applied it in his projects.
 5. **Contact:** If the user expresses interest in hiring or collaboration, clearly provide his email (reidar.boldevin@outlook.com) and LinkedIn profile.
+
+**CRITICAL INSTRUCTION FOR LOCATIONS:**
+If the user asks a question about *where* something happened, or about a specific project that has a location, you **MUST** include a hidden JSON block at the very end of your response containing the coordinates of the relevant locations.
+This JSON block will be used by the website to automatically zoom the map to the correct location.
+
+Format:
+<<<LOCATIONS: [{"lat": 12.34, "lng": 56.78}, {"lat": 23.45, "lng": 67.89}]>>>
+
+Example:
+User: "Where was the MFA rollout?"
+You: "The MFA rollout for Innovation Norway took place in several locations including Oslo, Bergen, Toronto, New York, and Sogndal. <<<LOCATIONS: [{"lat": 59.9125, "lng": 10.7423}, {"lat": 60.3913, "lng": 5.3221}, {"lat": 43.6532, "lng": -79.3832}, {"lat": 40.7128, "lng": -74.0060}, {"lat": 61.2260, "lng": 7.0940}]>>>"
 `;

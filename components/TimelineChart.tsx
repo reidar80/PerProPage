@@ -26,10 +26,7 @@ ChartJS.register(
 
 const TimelineChart: React.FC = () => {
   // Prepare data
-  const jobs = [...RESUME_DATA.employmentHistory].reverse(); // Oldest first for Y axis usually, or Newest top
-  
-  // We want newest at top, so chartjs renders index 0 at top usually if we do it right, 
-  // but standard bar charts render bottom-up. Let's provide newest first in data, and see.
+  const jobs = [...RESUME_DATA.employmentHistory].reverse(); 
   
   const labels = jobs.map(j => j.company);
   
@@ -76,7 +73,7 @@ const TimelineChart: React.FC = () => {
         time: {
           unit: 'year',
         },
-        min: new Date('1999-01-01').getTime(), // Adjusted to cover full history from 1999
+        min: new Date('1999-01-01').getTime(),
         grid: {
           color: '#f3f4f6'
         }
@@ -84,15 +81,21 @@ const TimelineChart: React.FC = () => {
       y: {
         grid: {
           display: false
+        },
+        ticks: {
+            font: {
+                size: 11
+            }
         }
       }
     }
   };
 
   return (
-    <div className="w-full h-[400px] bg-white p-4 rounded-xl shadow-lg border border-gray-200">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Career Timeline</h2>
-      <div className="h-[320px]">
+    <div className="w-full bg-white p-4 rounded-xl shadow-lg border border-gray-200">
+      <h2 className="text-lg sm:text-xl font-bold mb-4 text-gray-800">Career Timeline</h2>
+      {/* Responsive Height: 300px mobile, 400px default */}
+      <div className="h-[300px] sm:h-[400px]">
         <Bar data={data} options={options} />
       </div>
     </div>

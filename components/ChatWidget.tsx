@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { sendMessage } from '../services/geminiService';
 import { ChatMessage } from '../types';
+import SimpleTooltip from './SimpleTooltip';
 
 // --- Custom Markdown Renderer ---
 const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
@@ -97,16 +98,55 @@ const ChatWidget: React.FC = () => {
     }
   }, [messages, isOpen]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  // Listen for custom trigger events from other components
+  useEffect(() => {
+    const handleChatTrigger = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && customEvent.detail.prompt) {
+        setIsOpen(true);
+        handleSend(customEvent.detail.prompt);
+      }
+    };
 
-    const userMsg: ChatMessage = { role: 'user', text: input };
+    window.addEventListener('chat:trigger', handleChatTrigger);
+    return () => {
+      window.removeEventListener('chat:trigger', handleChatTrigger);
+    };
+  }, []);
+
+  const handleSend = async (overrideText?: string) => {
+    const textToSend = overrideText || input;
+    
+    if (!textToSend.trim() || isLoading) return;
+
+    const userMsg: ChatMessage = { role: 'user', text: textToSend };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setIsLoading(true);
 
-    const responseText = await sendMessage(input);
+    let responseText = await sendMessage(textToSend);
     
+    // --- PARSE HIDDEN LOCATION DATA ---
+    const locationRegex = /<<<LOCATIONS:\s*(\[.*?\])>>>/s;
+    const match = responseText.match(locationRegex);
+    
+    if (match && match[1]) {
+       try {
+         const locations = JSON.parse(match[1]);
+         // Remove the hidden block from display
+         responseText = responseText.replace(match[0], '').trim();
+         
+         // Dispatch Map Highlight Event
+         const event = new CustomEvent('map:highlight', { 
+            detail: { locations: locations } 
+         });
+         window.dispatchEvent(event);
+         
+       } catch (e) {
+         console.warn("Failed to parse locations from AI response", e);
+       }
+    }
+
     const botMsg: ChatMessage = { role: 'model', text: responseText };
     setMessages(prev => [...prev, botMsg]);
     setIsLoading(false);
@@ -117,12 +157,12 @@ const ChatWidget: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end font-sans">
-      {/* Chat Window */}
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end font-sans pointer-events-none">
+      {/* Chat Window - Responsive Width */}
       {isOpen && (
-        <div className="mb-4 w-[350px] sm:w-[400px] h-[550px] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden transition-all animate-in fade-in slide-in-from-bottom-10">
+        <div className="mb-4 w-[90vw] sm:w-[400px] h-[500px] max-h-[75vh] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col pointer-events-auto animate-in fade-in slide-in-from-bottom-10">
           {/* Header */}
-          <div className="bg-slate-900 text-white p-4 flex justify-between items-center shadow-md">
+          <div className="bg-slate-900 text-white p-4 flex justify-between items-center shadow-md rounded-t-2xl">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center border-2 border-white/20">
                 <i className="fas fa-robot text-white text-sm"></i>
@@ -132,9 +172,11 @@ const ChatWidget: React.FC = () => {
                 <p className="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Powered by Gemini</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">
-              <i className="fas fa-minus"></i>
-            </button>
+            <SimpleTooltip text="Minimize chat" position="left">
+              <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10">
+                <i className="fas fa-minus"></i>
+              </button>
+            </SimpleTooltip>
           </div>
 
           {/* Messages */}
@@ -169,7 +211,7 @@ const ChatWidget: React.FC = () => {
           </div>
 
           {/* Input Area */}
-          <div className="p-3 bg-white border-t border-gray-100">
+          <div className="p-3 bg-white border-t border-gray-100 rounded-b-2xl">
             <div className="flex items-center gap-2">
               <div className="relative flex-1">
                 <input
@@ -177,30 +219,34 @@ const ChatWidget: React.FC = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask about projects, skills, history..."
+                  placeholder="Ask about projects..."
                   className="w-full bg-gray-100 text-sm rounded-full pl-4 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all shadow-inner"
                 />
-                <button 
-                  onClick={handleSend}
-                  disabled={!input.trim() || isLoading}
-                  className="absolute right-1 top-1 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-                >
-                  <i className="fas fa-paper-plane text-xs"></i>
-                </button>
+                <SimpleTooltip text="Send message" position="top">
+                  <button 
+                    onClick={() => handleSend()}
+                    disabled={!input.trim() || isLoading}
+                    className="absolute right-1 top-1 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  >
+                    <i className="fas fa-paper-plane text-xs"></i>
+                  </button>
+                </SimpleTooltip>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Toggle Button (Only visible when closed) */}
+      {/* Toggle Button */}
       {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-slate-900 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ring-4 ring-white/20"
-        >
-          <i className="fas fa-comment-alt text-xl"></i>
-        </button>
+        <SimpleTooltip text="Open AI Assistant" position="left">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="bg-slate-900 hover:bg-blue-700 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ring-4 ring-white/20 pointer-events-auto"
+          >
+            <i className="fas fa-comment-alt text-lg sm:text-xl"></i>
+          </button>
+        </SimpleTooltip>
       )}
     </div>
   );

@@ -22,6 +22,7 @@ export const sendMessage = async (message: string): Promise<string> => {
         model: 'gemini-3-pro-preview',
         config: {
           systemInstruction: fullSystemInstruction,
+          tools: [{ googleSearch: {} }],
         },
       });
     }

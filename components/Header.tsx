@@ -3,21 +3,22 @@ import { RESUME_DATA, UI_TRANSLATIONS } from '../constants';
 import { Language } from '../types';
 import { generatePdfSummary } from '../services/geminiService';
 import { generatePDF } from '../utils/pdfGenerator';
+import SimpleTooltip from './SimpleTooltip';
 
 interface HeaderProps {
   language: Language;
   setLanguage: (lang: Language) => void;
+  id?: string;
+  onMenuClick: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
+const Header: React.FC<HeaderProps> = ({ language, setLanguage, id, onMenuClick }) => {
   const { contact } = RESUME_DATA;
   const [imgError, setImgError] = useState(false);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const t = UI_TRANSLATIONS;
 
   const handleLocationClick = () => {
-    // Dispatch event to map component
-    // Coordinates for Asker, Norway
     const event = new CustomEvent('map:focus', { 
       detail: { lat: 59.8333, lng: 10.4400, zoom: 11.9 } 
     });
@@ -26,14 +27,10 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
 
   const handleDownloadPdf = async () => {
     if (isGeneratingPdf) return;
-    
-    // PDF generation for Chinese requires large font files which are not optimal for client-side generation.
-    // We fallback to English to ensure the PDF is generated correctly and legibly.
     const pdfLanguage: Language = language === 'zh' ? 'en' : language;
 
     setIsGeneratingPdf(true);
     try {
-      // 1. Get Image as Base64
       let imgBase64: string | undefined = undefined;
       try {
         const response = await fetch('img/reidar.jpg');
@@ -47,10 +44,7 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
         console.warn("Could not load image for PDF", e);
       }
 
-      // 2. Generate Summary via AI
       const aiSummary = await generatePdfSummary(pdfLanguage);
-
-      // 3. Generate PDF
       await generatePDF(RESUME_DATA, pdfLanguage, aiSummary, imgBase64);
     } catch (e) {
       console.error("Failed to generate PDF", e);
@@ -61,37 +55,55 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
   };
 
   return (
-    <header className="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8 shadow-md relative">
-      {/* Language Switcher */}
-      <div className="absolute top-4 right-4 flex gap-2 z-10">
+    <header id={id} className="bg-slate-900 text-white py-8 lg:py-12 px-4 sm:px-6 lg:px-8 shadow-md relative scroll-mt-20">
+      
+      {/* Top Bar (Mobile Menu + Language) */}
+      <div className="flex justify-between items-center mb-6 lg:mb-0 lg:absolute lg:top-4 lg:right-4 lg:z-10 w-full lg:w-auto">
+        
+        {/* Mobile Menu Button */}
         <button 
-          onClick={() => setLanguage('en')} 
-          className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'en' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
-          title="English"
+          onClick={onMenuClick}
+          className="lg:hidden text-white p-2 hover:bg-slate-800 rounded-lg transition-colors"
         >
-          <img src="https://flagcdn.com/w80/gb.png" alt="English" className="w-full h-full object-cover" />
+          <i className="fas fa-bars text-2xl"></i>
         </button>
-        <button 
-          onClick={() => setLanguage('no')} 
-          className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'no' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
-          title="Norsk"
-        >
-          <img src="https://flagcdn.com/w80/no.png" alt="Norsk" className="w-full h-full object-cover" />
-        </button>
-        <button 
-          onClick={() => setLanguage('zh')} 
-          className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'zh' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
-          title="Chinese"
-        >
-          <img src="https://flagcdn.com/w80/cn.png" alt="Chinese" className="w-full h-full object-cover" />
-        </button>
+
+        {/* Language Switcher */}
+        <div className="flex gap-3">
+          <SimpleTooltip text="Switch to English" position="bottom">
+            <button 
+              onClick={() => setLanguage('en')} 
+              className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'en' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
+            >
+              <img src="https://flagcdn.com/w80/gb.png" alt="English" className="w-full h-full object-cover" />
+            </button>
+          </SimpleTooltip>
+          
+          <SimpleTooltip text="Bytt til Norsk" position="bottom">
+            <button 
+              onClick={() => setLanguage('no')} 
+              className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'no' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
+            >
+              <img src="https://flagcdn.com/w80/no.png" alt="Norsk" className="w-full h-full object-cover" />
+            </button>
+          </SimpleTooltip>
+
+          <SimpleTooltip text="切换到中文" position="bottom">
+            <button 
+              onClick={() => setLanguage('zh')} 
+              className={`w-8 h-8 rounded-full overflow-hidden border-2 transition-transform hover:scale-110 ${language === 'zh' ? 'border-blue-400' : 'border-transparent opacity-70 hover:opacity-100'}`}
+            >
+              <img src="https://flagcdn.com/w80/cn.png" alt="Chinese" className="w-full h-full object-cover" />
+            </button>
+          </SimpleTooltip>
+        </div>
       </div>
 
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
+      <div className="w-full mt-4 lg:mt-0">
+        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8">
           
           {/* Profile & Contact Info */}
-          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8 flex-1 min-w-0">
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-6 lg:gap-8 flex-1 min-w-0 w-full md:w-auto">
             
             {/* Profile Image */}
             <div className="shrink-0 relative">
@@ -102,75 +114,85 @@ const Header: React.FC<HeaderProps> = ({ language, setLanguage }) => {
                   className="w-full h-full object-cover object-top" 
                   onError={(e) => {
                     e.currentTarget.style.display = 'none'; 
-                    setImgError(true); // Tracking error if needed for fallback UI logic
+                    setImgError(true);
                   }}
                 />
               </div>
             </div>
 
             {/* Contact Text */}
-            <div className="space-y-2 text-center md:text-left min-w-0 flex-1">
-              <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight break-words">
+            <div className="space-y-3 text-center md:text-left min-w-0 flex-1 w-full">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight break-words">
                 {contact.name}
               </h1>
-              <p className="text-xl text-blue-400 font-medium">
+              <p className="text-lg sm:text-xl text-blue-400 font-medium">
                 {contact.title[language]}
               </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-4 text-slate-300 text-sm mt-4">
-                <button 
-                  onClick={handleLocationClick}
-                  className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer bg-transparent border-none p-0 text-inherit"
-                  title="Show on map"
-                >
-                  <i className="fas fa-map-marker-alt text-blue-500"></i> {contact.location}
-                </button>
-                <a 
-                  href={`mailto:${contact.email}`} 
-                  className="flex items-center gap-2 hover:text-blue-400 transition-colors"
-                >
-                  <i className="fas fa-envelope text-blue-500"></i> {contact.email}
-                </a>
-                <span className="flex items-center gap-2">
+              
+              <div className="flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4 text-slate-300 text-sm mt-4">
+                <SimpleTooltip text="Zoom map to Asker" position="bottom">
+                  <button 
+                    onClick={handleLocationClick}
+                    className="flex items-center gap-2 hover:text-blue-400 transition-colors cursor-pointer bg-transparent border-none p-0 text-inherit"
+                  >
+                    <i className="fas fa-map-marker-alt text-blue-500"></i> {contact.location}
+                  </button>
+                </SimpleTooltip>
+                
+                <SimpleTooltip text="Send email to Reidar" position="bottom">
+                  <a 
+                    href={`mailto:${contact.email}`} 
+                    className="flex items-center gap-2 hover:text-blue-400 transition-colors break-all"
+                  >
+                    <i className="fas fa-envelope text-blue-500"></i> {contact.email}
+                  </a>
+                </SimpleTooltip>
+
+                <span className="flex items-center gap-2 cursor-default whitespace-nowrap">
                   <i className="fas fa-phone text-blue-500"></i> {contact.mobile}
                 </span>
               </div>
               
-              <div className="flex justify-center md:justify-start pt-4 gap-3">
-                <a 
-                  href={contact.linkedin} 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors text-white font-medium shadow-md"
-                >
-                  <i className="fab fa-linkedin text-xl"></i>
-                  <span>{t.linkedin_profile[language]}</span>
-                </a>
+              <div className="flex flex-wrap justify-center md:justify-start pt-4 gap-3">
+                <SimpleTooltip text="Open LinkedIn Profile" position="bottom">
+                  <a 
+                    href={contact.linkedin} 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors text-white font-medium shadow-md text-sm sm:text-base"
+                  >
+                    <i className="fab fa-linkedin text-xl"></i>
+                    <span>{t.linkedin_profile[language]}</span>
+                  </a>
+                </SimpleTooltip>
                 
-                <button
-                  onClick={handleDownloadPdf}
-                  disabled={isGeneratingPdf}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-white font-medium shadow-md disabled:opacity-50 disabled:cursor-wait"
-                >
-                  {isGeneratingPdf ? (
-                    <>
-                       <i className="fas fa-circle-notch fa-spin"></i>
-                       <span>{t.generating_pdf[language]}</span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="fas fa-file-pdf"></i>
-                      <span>{t.download_pdf[language]}</span>
-                    </>
-                  )}
-                </button>
+                <SimpleTooltip text="Generate PDF Resume" position="bottom">
+                  <button
+                    onClick={handleDownloadPdf}
+                    disabled={isGeneratingPdf}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-white font-medium shadow-md disabled:opacity-50 disabled:cursor-wait text-sm sm:text-base"
+                  >
+                    {isGeneratingPdf ? (
+                      <>
+                         <i className="fas fa-circle-notch fa-spin"></i>
+                         <span>{t.generating_pdf[language]}</span>
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-file-pdf"></i>
+                        <span>{t.download_pdf[language]}</span>
+                      </>
+                    )}
+                  </button>
+                </SimpleTooltip>
               </div>
             </div>
           </div>
 
           {/* Bio Box */}
-          <div className="w-full lg:max-w-lg bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-sm mt-4 lg:mt-0">
+          <div className="w-full lg:max-w-md xl:max-w-lg bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-sm mt-6 lg:mt-0">
             <h2 className="text-sm uppercase tracking-wider text-slate-400 font-bold mb-2">{t.about_me[language]}</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-slate-300 leading-relaxed text-sm sm:text-base">
               {contact.bio[language]}
             </p>
           </div>

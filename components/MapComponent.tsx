@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { RESUME_DATA, UI_TRANSLATIONS } from '../constants';
-import { Job, Project, Language } from '../types';
+import { Job, Project, Language, Location } from '../types';
 import L from 'leaflet';
 
 interface LocationData {
@@ -18,6 +18,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.CircleMarker[]>([]);
+  const pulseIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const t = UI_TRANSLATIONS;
 
   // Helper to extract year from YYYY-MM-DD
@@ -28,7 +29,7 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
 
   // Function to get tooltip content based on current language and state
   const getTooltipContent = (isProjectView: boolean, jobs: Job[], projects: Project[], hasJobs: boolean, hasProjects: boolean) => {
-    let content = '<div class="font-sans min-w-[220px] p-1">';
+    let content = '<div class="font-sans min-w-[200px] sm:min-w-[220px] p-1">';
     
     if (!isProjectView) {
       // --- Employment View ---
@@ -87,6 +88,49 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
     return content;
   };
 
+  // --- PULSING LOGIC ---
+  const stopPulsing = () => {
+    if (pulseIntervalRef.current) {
+      clearInterval(pulseIntervalRef.current);
+      pulseIntervalRef.current = null;
+    }
+    // Reset all markers to their "normal" color state
+    markersRef.current.forEach(marker => {
+      // @ts-ignore
+      const isProjectView = marker._isProjectView;
+      const originalColor = isProjectView ? '#3B82F6' : '#22c55e'; // blue-500 : green-500
+      marker.setStyle({ fillColor: originalColor, color: isProjectView ? '#2563EB' : '#16a34a' });
+    });
+  };
+
+  const startPulsing = (targetMarkers: L.CircleMarker[]) => {
+    stopPulsing(); // Clear any existing pulse
+
+    let isYellow = false;
+    
+    const pulse = () => {
+      isYellow = !isYellow;
+      targetMarkers.forEach(marker => {
+         // @ts-ignore
+         const isProjectView = marker._isProjectView;
+         const originalFill = isProjectView ? '#3B82F6' : '#22c55e';
+         const originalStroke = isProjectView ? '#2563EB' : '#16a34a';
+
+         if (isYellow) {
+           marker.setStyle({ fillColor: '#ffff00', color: '#eab308' }); // Yellow / Yellow-600
+         } else {
+           marker.setStyle({ fillColor: originalFill, color: originalStroke });
+         }
+      });
+    };
+
+    // Initial trigger
+    pulse(); 
+    // Set interval (0.5Hz = 2 seconds period, so toggle every 1s)
+    pulseIntervalRef.current = setInterval(pulse, 1000);
+  };
+
+  // --- INIT MAP ---
   useEffect(() => {
     if (mapContainerRef.current && !mapInstanceRef.current) {
       // Initialize Map
@@ -99,6 +143,9 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
       }).addTo(map);
 
       mapInstanceRef.current = map;
+      
+      // Force refresh on resize
+      setTimeout(() => map.invalidateSize(), 100);
     }
 
     // Listen for custom "map:focus" events
@@ -110,8 +157,64 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
       }
     };
 
+    // Listen for custom "map:highlight" events (Multiple or single locations with Pulsing)
+    const handleMapHighlight = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (mapInstanceRef.current && customEvent.detail) {
+        const locations: { lat: number, lng: number }[] = customEvent.detail.locations;
+        const zoom = customEvent.detail.zoom || 11.7;
+
+        // Scroll to map
+        mapContainerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Identify markers to pulse
+        const targets: L.CircleMarker[] = [];
+        
+        locations.forEach(loc => {
+           // Find markers close to these coords
+           const matched = markersRef.current.find(m => {
+             const mLoc = m.getLatLng();
+             // Simple float comparison epsilon
+             return Math.abs(mLoc.lat - loc.lat) < 0.0001 && Math.abs(mLoc.lng - loc.lng) < 0.0001;
+           });
+           if (matched) targets.push(matched);
+        });
+
+        if (targets.length > 0) {
+           startPulsing(targets);
+        }
+
+        // Zoom logic
+        if (locations.length === 1) {
+           mapInstanceRef.current.flyTo([locations[0].lat, locations[0].lng], zoom, { duration: 2 });
+        } else if (locations.length > 1) {
+           const bounds = L.latLngBounds(locations.map(l => [l.lat, l.lng]));
+           mapInstanceRef.current.flyToBounds(bounds, { padding: [50, 50], duration: 2 });
+        }
+      }
+    };
+
     window.addEventListener('map:focus', handleMapFocus);
-    return () => window.removeEventListener('map:focus', handleMapFocus);
+    window.addEventListener('map:highlight', handleMapHighlight);
+    
+    // Stop pulsing on window scroll (scrolling away from map)
+    const handleWindowScroll = () => {
+       if (mapContainerRef.current) {
+         const rect = mapContainerRef.current.getBoundingClientRect();
+         // If map is completely out of viewport, stop pulsing
+         if (rect.bottom < 0 || rect.top > window.innerHeight) {
+            stopPulsing();
+         }
+       }
+    };
+    window.addEventListener('scroll', handleWindowScroll);
+
+    return () => {
+      window.removeEventListener('map:focus', handleMapFocus);
+      window.removeEventListener('map:highlight', handleMapHighlight);
+      window.removeEventListener('scroll', handleWindowScroll);
+      stopPulsing();
+    };
   }, []);
 
   // Update markers when language changes or map initializes
@@ -138,10 +241,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
       else data.projects.push(item as Project);
     };
 
-    RESUME_DATA.employmentHistory.forEach(job => addLocation(job.lat, job.lng, job, 'job'));
+    // Process Jobs
+    RESUME_DATA.employmentHistory.forEach(job => {
+      if (job.locations && job.locations.length > 0) {
+        job.locations.forEach(loc => addLocation(loc.lat, loc.lng, job, 'job'));
+      } else if (job.lat && job.lng) {
+        addLocation(job.lat, job.lng, job, 'job');
+      }
+    });
+
+    // Process Projects
     RESUME_DATA.projects.forEach(proj => {
-      if (proj.lat && proj.lng) {
-        addLocation(proj.lat, proj.lng, proj, 'project');
+      if (proj.locations && proj.locations.length > 0) {
+        proj.locations.forEach(loc => addLocation(loc.lat, loc.lng, proj, 'project'));
       }
     });
 
@@ -217,18 +329,19 @@ const MapComponent: React.FC<MapComponentProps> = ({ language }) => {
   }, [language]);
 
   return (
-    <div className="w-full h-[500px] rounded-xl overflow-hidden shadow-lg border border-gray-200 z-0 relative">
+    // Responsive Height: 350px on mobile, 500px on default (md+)
+    <div className="w-full h-[350px] md:h-[500px] rounded-xl overflow-hidden shadow-lg border border-gray-200 z-0 relative">
       <div ref={mapContainerRef} className="w-full h-full" />
       
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 bg-white/95 p-3 rounded-lg shadow-md text-xs z-[400] border border-gray-200 backdrop-blur-sm">
+      {/* Legend - Simplified for mobile if needed, but absolute works fine with enough map height */}
+      <div className="absolute bottom-4 left-4 bg-white/95 p-3 rounded-lg shadow-md text-xs z-[400] border border-gray-200 backdrop-blur-sm max-w-[200px]">
          <div className="font-bold mb-2 text-gray-700 uppercase tracking-wider text-[10px]">Legend</div>
          <div className="flex items-center gap-2 mb-2">
-           <div className="w-3 h-3 rounded-full bg-green-500 border border-green-600"></div>
+           <div className="w-3 h-3 rounded-full bg-green-500 border border-green-600 shrink-0"></div>
            <span>{t.map_legend_employment[language]}</span>
          </div>
          <div className="flex items-center gap-2">
-           <div className="w-3 h-3 rounded-full bg-blue-500 border border-blue-600"></div>
+           <div className="w-3 h-3 rounded-full bg-blue-500 border border-blue-600 shrink-0"></div>
            <span>{t.map_legend_project[language]}</span>
          </div>
          <div className="mt-2 text-[10px] text-gray-500 italic border-t border-gray-200 pt-1">

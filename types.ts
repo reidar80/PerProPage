@@ -6,14 +6,21 @@ export interface LocalizedString {
   zh: string;
 }
 
+export interface Location {
+  name: string;
+  lat: number;
+  lng: number;
+}
+
 export interface Job {
   company: string;
   role: LocalizedString;
   startDate: string; // ISO format YYYY-MM-DD
   endDate: string | "Present";
-  location: string;
-  lat: number;
-  lng: number;
+  location: string; // Display string for list
+  lat: number; // Primary lat for map grouping if needed
+  lng: number; // Primary lng for map grouping if needed
+  locations?: Location[]; // Support for multiple locations
   description?: LocalizedString;
 }
 
@@ -21,9 +28,7 @@ export interface Project {
   name: string;
   year: string;
   description: LocalizedString;
-  location?: string;
-  lat?: number;
-  lng?: number;
+  locations: Location[]; // Standardized to array
 }
 
 export interface Education {
