@@ -170,7 +170,7 @@ export const RESUME_DATA: ResumeData = {
   ],
   employmentHistory: [
     {
-      company: "Fortytwo",
+      company: "Fortytwo Technologies",
       role: {
         en: "Principal Engineer",
         no: "Sjefingeniør",
