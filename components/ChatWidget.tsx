@@ -82,19 +82,31 @@ const ChatWidget: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true); // Default to open
   
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'model', text: 'Hi! I am Reidar\'s AI assistant. Ask me anything about his experience, skills, or projects.' }
+    { role: 'model', text: 'Hi! I am Reidar\'s BragBot. Ask me anything about his experience, skills, or projects.' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const latestModelMessageRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
+  // Scroll Logic
   useEffect(() => {
     if (isOpen) {
-      scrollToBottom();
+      const lastMsg = messages[messages.length - 1];
+      
+      if (lastMsg?.role === 'user') {
+        // If user sent message (or loading state follows), scroll to bottom
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      } else if (lastMsg?.role === 'model') {
+        // If AI responded, scroll to the START of that message
+        setTimeout(() => {
+          latestModelMessageRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      } else {
+        // Fallback
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, [messages, isOpen]);
 
@@ -168,7 +180,7 @@ const ChatWidget: React.FC = () => {
                 <i className="fas fa-robot text-white text-sm"></i>
               </div>
               <div>
-                <h3 className="font-bold text-sm">Reidar's AI Assistant</h3>
+                <h3 className="font-bold text-sm">Reidar's BragBot</h3>
                 <p className="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Powered by Gemini</p>
               </div>
             </div>
@@ -181,21 +193,30 @@ const ChatWidget: React.FC = () => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 bg-slate-50 space-y-4">
-            {messages.map((msg, idx) => (
-              <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${
-                  msg.role === 'user' 
-                    ? 'bg-blue-600 text-white rounded-br-none' 
-                    : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'
-                }`}>
-                   {msg.role === 'user' ? (
-                     <div className="text-sm">{msg.text}</div>
-                   ) : (
-                     <MarkdownRenderer content={msg.text} />
-                   )}
+            {messages.map((msg, idx) => {
+              // Attach ref to the latest model message for auto-scrolling
+              const isLastModelMessage = idx === messages.length - 1 && msg.role === 'model';
+              
+              return (
+                <div 
+                  key={idx} 
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  ref={isLastModelMessage ? latestModelMessageRef : null}
+                >
+                  <div className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${
+                    msg.role === 'user' 
+                      ? 'bg-blue-600 text-white rounded-br-none' 
+                      : 'bg-white text-gray-800 border border-gray-100 rounded-bl-none'
+                  }`}>
+                     {msg.role === 'user' ? (
+                       <div className="text-sm">{msg.text}</div>
+                     ) : (
+                       <MarkdownRenderer content={msg.text} />
+                     )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
@@ -239,7 +260,7 @@ const ChatWidget: React.FC = () => {
 
       {/* Toggle Button */}
       {!isOpen && (
-        <SimpleTooltip text="Open AI Assistant" position="left">
+        <SimpleTooltip text="Open BragBot" position="left">
           <button
             onClick={() => setIsOpen(true)}
             className="bg-slate-900 hover:bg-blue-700 text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 transform hover:scale-110 hover:-translate-y-1 ring-4 ring-white/20 pointer-events-auto"

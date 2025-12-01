@@ -11,6 +11,27 @@ const getAiInstance = () => {
   return ai;
 };
 
+// Helper for exponential backoff retry logic
+const retryWithBackoff = async <T>(
+  fn: () => Promise<T>, 
+  retries = 3, 
+  delay = 1000
+): Promise<T> => {
+  try {
+    return await fn();
+  } catch (error: any) {
+    // Check for 503 specifically or generic overload messages
+    const isOverloaded = error?.status === 503 || error?.code === 503 || error?.message?.includes('overloaded');
+    
+    if (retries > 0 && isOverloaded) {
+      console.warn(`Model overloaded. Retrying in ${delay}ms... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+      return retryWithBackoff(fn, retries - 1, delay * 2);
+    }
+    throw error;
+  }
+};
+
 export const sendMessage = async (message: string): Promise<string> => {
   try {
     const client = getAiInstance();
@@ -19,7 +40,7 @@ export const sendMessage = async (message: string): Promise<string> => {
       const fullSystemInstruction = `${SYSTEM_INSTRUCTION}\n\nHere is the resume data:\n${resumeContext}`;
       
       chatSession = client.chats.create({
-        model: 'gemini-3-pro-preview',
+        model: 'gemini-2.5-flash',
         config: {
           systemInstruction: fullSystemInstruction,
           tools: [{ googleSearch: {} }],
@@ -27,13 +48,16 @@ export const sendMessage = async (message: string): Promise<string> => {
       });
     }
 
-    const response: GenerateContentResponse = await chatSession.sendMessage({ 
-      message: message 
-    });
+    const response: GenerateContentResponse = await retryWithBackoff(() => 
+      chatSession!.sendMessage({ message: message })
+    );
     
     return response.text || "I couldn't generate a response.";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini Error:", error);
+    if (error?.status === 503 || error?.code === 503) {
+      return "I'm currently experiencing high traffic (Model Overloaded). Please try again in a moment.";
+    }
     return "Sorry, I encountered an error connecting to the AI service.";
   }
 };
@@ -43,7 +67,6 @@ export const generatePdfSummary = async (language: string): Promise<string> => {
     const client = getAiInstance();
     const resumeContext = JSON.stringify(RESUME_DATA, null, 2);
     
-    // We create a fresh single-turn request for the PDF summary to ensure strict adherence
     const prompt = `
       You are an expert resume writer.
       Based on the following JSON resume data, write a compelling professional presentation (profile summary) for Reidar J. Boldevin.
@@ -59,10 +82,12 @@ export const generatePdfSummary = async (language: string): Promise<string> => {
       ${resumeContext}
     `;
 
-    const response = await client.models.generateContent({
-      model: 'gemini-3-pro-preview',
-      contents: prompt,
-    });
+    const response: GenerateContentResponse = await retryWithBackoff(() => 
+      client.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+      })
+    );
 
     return response.text?.trim() || "Experienced IT Professional specializing in Cyber Security and Identity Management.";
   } catch (error) {

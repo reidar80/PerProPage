@@ -12,6 +12,11 @@ export interface Location {
   lng: number;
 }
 
+export interface LanguageItem {
+  name: LocalizedString;
+  proficiency: LocalizedString;
+}
+
 export interface Job {
   company: string;
   role: LocalizedString;
@@ -57,7 +62,7 @@ export interface ResumeData {
     summary: LocalizedString;
   };
   skills: string[];
-  languages: string[];
+  languages: LanguageItem[];
   certifications: Certification[];
   education: Education[];
   employmentHistory: Job[];

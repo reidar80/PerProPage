@@ -64,9 +64,18 @@ export const RESUME_DATA: ResumeData = {
     "Scrum Master / Agile"
   ],
   languages: [
-    "Norwegian (Bokmål)",
-    "English",
-    "German"
+    {
+      name: { en: "Norwegian", no: "Norsk", zh: "挪威语" },
+      proficiency: { en: "Native", no: "Morsmål", zh: "母语" }
+    },
+    {
+      name: { en: "English", no: "Engelsk", zh: "英语" },
+      proficiency: { en: "Fluent", no: "Flytende", zh: "流利" }
+    },
+    {
+      name: { en: "German", no: "Tysk", zh: "德语" },
+      proficiency: { en: "Basic", no: "Grunnleggende", zh: "基础" }
+    }
   ],
   certifications: [
     { 
@@ -114,15 +123,30 @@ export const RESUME_DATA: ResumeData = {
     {
       institution: "BI Norwegian Business School",
       degree: {
-        en: "Executive Master of Management (105 ECTS)",
-        no: "Executive Master of Management (105 studiepoeng)",
-        zh: "行政管理硕士 (105 ECTS)"
+        en: "Executive Master of Management (120 ECTS)",
+        no: "Executive Master of Management (120 studiepoeng)",
+        zh: "行政管理硕士 (120 ECTS)"
       },
       period: "2020 - 2025",
       description: {
-        en: "• Governance, Risk, Compliance and Internal Auditing (Spring 2025) - Grade A\n• Strategic Business Development and Innovation (Spring 2024) - Grade A\n• Leading in Digitized Workplaces (Spring 2023) - Grade A\n• Basic Business Economics (Spring 2021) - Grade A\n• Human Resource Management (Spring 2021) - Grade C\n• Logistics and Marketing (Autumn 2020) - Grade B\n• Leadership. Theory and Practice (Autumn 2020) - Grade C",
-        no: "• Styring, Risikostyring, Etterlevelse og Internrevisjon (Vår 2025) - Karakter A\n• Strategisk Forretningsutvikling og Innovasjon (Vår 2024) - Karakter A\n• Ledelse i Digitaliserte Arbeidsplasser (Vår 2023) - Karakter A\n• Bedriftsøkonomi (Vår 2021) - Karakter A\n• Human Resource Management (Vår 2021) - Karakter C\n• Logistikk og Markedsføring (Høst 2020) - Karakter B\n• Ledelse. Teori og Praksis (Høst 2020) - Karakter C",
-        zh: "• 治理、风险管理、合规与内部审计 (2025春) - 成绩 A\n• 战略业务发展与创新 (2024春) - 成绩 A\n• 数字化工作场所领导力 (2023春) - 成绩 A\n• 基础商业经济学 (2021春) - 成绩 A\n• 人力资源管理 (2021春) - 成绩 C\n• 物流与市场营销 (2020秋) - 成绩 B\n• 领导力：理论与实践 (2020秋) - 成绩 C"
+        en: `
+        • Generative AI for Business (Sep 2025 - Dec 2025) - Grade: ??
+        • Governance, Risk, Compliance and Internal Auditing (Sep 2024 - Jun 2025) - Grade: A.
+          This executive-level course equips professionals with the knowledge to integrate risk management, compliance, and internal audit into effective governance frameworks. It emphasizes a holistic and proactive approach to risk, ensuring organizations achieve their objectives securely and efficiently while adhering to laws and regulations. My project paper investigates how organizations can turn regulatory compliance, particularly in cybersecurity and privacy, from a cost or obligation into a strategic competitive advantage. Focusing on frameworks such as NIS2 and GDPR and using models like the Efficient Investment-Risk approach, it demonstrates how proactive compliance documentation and strategic cost allocation improve market trust, strengthen internal controls, and create business opportunities. The paper offers practical insights for executives and governance professionals who want to use compliance as a tool for resilience and growth in an increasingly complex regulatory environment. Skills: Risk Management · Regulatory Compliance · IT.
+
+        • Strategic Business Development and Innovation (Sep 2023 - May 2024) - Grade: A.
+          Strategic business development and innovation focus on how digital technology creates new opportunities for businesses, whether it concerns processes, organization, customer experiences, or business models. The program is rooted in the fields of strategy, management, and innovation, with a focus on business and technology understanding, as well as agile organization and innovation processes. Skills: Business Development · Innovation Management · Business Strategy · IT.
+
+        • Leading in Digitized Workplaces (Feb 2023 - Jun 2023) - Grade: A.
+          Leaders will develop the knowledge and skills to lead more effectively in an age where digitization and constant change are the new reality. Further, they will develop the insight needed to monitor their own leader behaviour and team responses to this behaviour, such that they are better able to manage themselves and others regardless of where this new reality takes them. We presented a project case where we explored the potential changes to the way pathology is performed in a world saturated by AI services. Collaborating with a major medical lab, we had the opportunity to gain direct insight and responses from pathologists on their own view of changes as a result of the introduction of AI in the field. We explored topics like job tasks and job design, mindset, resource utilization and technological development, innovation and utilization. Skills: Digital Strategy · Change Management · Project Management · IT · Digitization.
+
+        • Basic Business Economics (Spring 2021) - Grade A
+        • Human Resource Management (Spring 2021) - Grade C
+        • Logistics and Marketing (Autumn 2020) - Grade B
+        • Leadership. Theory and Practice (Autumn 2020) - Grade C
+        `,
+        no: "• Generativ KI for Business (Høst 2025) - Karakter: ??\n• Styring, Risikostyring, Etterlevelse og Internrevisjon (Vår 2025) - Karakter A\n• Strategisk Forretningsutvikling og Innovasjon (Vår 2024) - Karakter A\n• Ledelse i Digitaliserte Arbeidsplasser (Vår 2023) - Karakter A\n• Bedriftsøkonomi (Vår 2021) - Karakter A\n• Human Resource Management (Vår 2021) - Karakter C\n• Logistikk og Markedsføring (Høst 2020) - Karakter B\n• Ledelse. Teori og Praksis (Høst 2020) - Karakter C",
+        zh: "• 商业生成式人工智能 (2025秋) - 成绩: ??\n• 治理、风险管理、合规与内部审计 (2025春) - 成绩 A\n• 战略业务发展与创新 (2024春) - 成绩 A\n• 数字化工作场所领导力 (2023春) - 成绩 A\n• 基础商业经济学 (2021春) - 成绩 A\n• 人力资源管理 (2021春) - 成绩 C\n• 物流与市场营销 (2020秋) - 成绩 B\n• 领导力：理论与实践 (2020秋) - 成绩 C"
       }
     },
     {
@@ -134,7 +158,7 @@ export const RESUME_DATA: ResumeData = {
       },
       period: "2021 - 2022",
       description: {
-        en: "• Financial accounting - Analysis and reporting (Autumn 2022) - Grade A\n• Cyber Security (Autumn 2022) - Grade B\n• Business decision making (Autumn 2022) - Grade B\n• Financial Management – budgeting and forecasting (Autumn 2021) - Grade B\n• Introduction to Management of health, safety and environment (Spring 2021) - Grade A",
+        en: "• Financial accounting - Analysis and reporting (Aug 2022 - Oct 2022) - Grade A\n• Cyber Security (Sep 2022 - Nov 2022) - Grade B\n• Business decision making (Oct 2022 - Dec 2022) - Grade B\n• Financial Management – budgeting and forecasting (Aug 2021 - Dec 2021) - Grade B\n• Introduction to Management of health, safety and environment (Aug 2021 - Nov 2021) - Grade A. Grunnleggende HMS-ledelse med fokus på å oppfylle de forskriftsmessige kravene for verneombud og medlemmer i arbeidsmiljøutvalg.",
         no: "• Finansregnskap - Analyse og rapportering (Høst 2022) - Karakter A\n• Cybersikkerhet (Høst 2022) - Karakter B\n• Økonomiske beslutningsproblemer (Høst 2022) - Karakter B\n• Økonomistyring – budsjettering og prognoser (Høst 2021) - Karakter B\n• Innføring i Helse, Miljø og Sikkerhet (Vår 2021) - Karakter A",
         zh: "• 财务会计 - 分析与报告 (2022秋) - 成绩 A\n• 网络安全 (2022秋) - 成绩 B\n• 商业决策 (2022秋) - 成绩 B\n• 财务管理 – 预算与预测 (2021秋) - 成绩 B\n• 健康、安全与环境管理导论 (2021春) - 成绩 A"
       }
@@ -148,7 +172,12 @@ export const RESUME_DATA: ResumeData = {
       },
       period: "2021 - 2022",
       description: {
-        en: "• Project Management in Practice (Spring 2022) - Grade C\n• Change Management (Autumn 2021) - Grade C",
+        en: `
+        • Project Management (Aug 2021 - Jun 2022) - Grade C.
+        A comprehensive project management course (30 credits). My exam had the topic: "How to use change management to maximize effect realization in projects" and used the joint curriculum from change management, SAFe PC certification and this project management course to discover how change management can be used to enforce the results and effects gained from one or more projects. Skills: IT.
+
+        • Change Management (Aug 2021 - Dec 2021) - Grade C. Skills: IT.
+        `,
         no: "• Prosjektledelse i praksis (Vår 2022) - Karakter C\n• Endringsledelse (Høst 2021) - Karakter C",
         zh: "• 项目管理实践 (2022春) - 成绩 C\n• 变革管理 (2021秋) - 成绩 C"
       }
@@ -162,9 +191,29 @@ export const RESUME_DATA: ResumeData = {
       },
       period: "2020",
       description: {
-        en: "• Information Systems (Autumn 2020) - Grade B",
+        en: "• Information Systems (Jun 2020 - Aug 2020) - Grade B. Summer course, 7.5 credits.",
         no: "• Informasjonssystemer (Høst 2020) - Karakter B",
         zh: "• 信息系统 (2020秋) - 成绩 B"
+      }
+    },
+    {
+      institution: "Noroff University College",
+      degree: {
+        en: "Digital Security & Network Management (Associate's degree equivalents)",
+        no: "Digital Sikkerhet og Nettverksadministrasjon",
+        zh: "数字安全与网络管理"
+      },
+      period: "2002 - 2004",
+      description: {
+        en: `
+        • Digital Security and Intelligence (Aug 2003 - Jun 2004) - Grade 1.8.
+          Study focusing on information security on the technical and administrative aspects of computer security, both in the preparatory, implementing and reaction phase. Skills: IT.
+
+        • Network and Server Management (Aug 2002 - Jun 2003) - Grade 2.3.
+          Topics: Windows and Linux administration, Windows client administration, Cisco network administration, Basic security and firewall management. Skills: IT.
+        `,
+        no: "• Digital Sikkerhet og Etterretning (2003-2004) - Karakter 1.8\n• Nettverk og Serveradministrasjon (2002-2003) - Karakter 2.3",
+        zh: "• 数字安全与情报 (2003-2004) - 成绩 1.8\n• 网络与服务器管理 (2002-2003) - 成绩 2.3"
       }
     }
   ],
